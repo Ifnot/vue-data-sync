@@ -44,7 +44,7 @@ export default {
         }
       })
 
-      console.log('[ VDS ] Adding data synchronizer : ' + vnode + ' -> ' + path + ' (' + unique + ')')
+      console.log('[ VDS ] Adding data synchronizer : ' + vnode + ' -> ' + config.name + ' (' + path.join('.') + ') (id ' + unique + ')')
 
       uniques.push(unique)
     }
