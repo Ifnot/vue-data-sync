@@ -8,7 +8,7 @@ let defaultHandlers = {
     // if (index === -1) data.push(model)
   },
   onUpdate ({data, model, index}) {
-    if (index) Vue.set(data, index, model)
+    if (index !== -1) Vue.set(data, index, model)
   },
   onDelete ({data, model, index}) {
     if (index !== -1) data.splice(index, 1)
