@@ -28,18 +28,19 @@ export default {
     })
 
     // Listen for events
-    options.driver.listen()
-    options.driver.on('event', self.handleEvents)
+    this.driver = options.driver
+    this.driver.listen()
+    this.driver.on('event', self.handleEvents)
     Vue.prototype.$sync = {
       on (name, handler) {
-        options.driver.on('event', (e) => {
+        self.driver.on('event', (e) => {
           if (matchRule(e.model_name + ':' + e.event, name)) {
             handler(e)
           }
         })
       },
       once (name, handler) {
-        options.driver.once('event', (e) => {
+        self.driver.once('event', (e) => {
           if (matchRule(e.model_name + ':' + e.event, name)) {
             handler(e)
           }
