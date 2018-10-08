@@ -26,8 +26,8 @@ export default {
       }
     } else {
       let config = null
-      if (typeof value === 'function') config = Object.assign(defaultHandlers, value())
-      else config = Object.assign({name: value}, defaultHandlers)
+      if (typeof value === 'function') config = Object.assign({}, defaultHandlers, value())
+      else config = Object.assign({}, {name: value}, defaultHandlers)
 
       if (!datasets[config.name]) datasets[config.name] = []
 
