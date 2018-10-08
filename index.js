@@ -19,8 +19,7 @@ export default {
     // Hooks all sync() methods on components
     Vue.mixin({
       created: function () {
-        let vnode = this.$vnode ? this.$vnode.tag : ''
-        this.syncHandlersIds = Datasets.add(vnode, this.$data, [], this.$options.sync ? this.$options.sync : {})
+        this.syncHandlersIds = Datasets.add(this, [], this.$options.sync ? this.$options.sync : {})
       },
       destroyed: function () {
         Datasets.remove(this.syncHandlersIds)

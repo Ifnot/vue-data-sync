@@ -16,17 +16,18 @@ let defaultHandlers = {
 }
 
 export default {
-  add (vnode, data, path, value) {
+  add (component, path, value) {
     let uniques = []
     let valueIsChild = typeof value === 'object'
 
     if (valueIsChild) {
       for (let key in value) {
-        uniques = uniques.concat(this.add(vnode, data, path.concat(key), value[key]))
+        uniques = uniques.concat(this.add(component, path.concat(key), value[key]))
       }
     } else {
+      let tag = component.$vnode ? component.$vnode.tag : ''
       let config = null
-      if (typeof value === 'function') config = Object.assign({}, defaultHandlers, value())
+      if (typeof value === 'function') config = Object.assign({}, defaultHandlers, value.apply(component))
       else config = Object.assign({}, {name: value}, defaultHandlers)
 
       if (!datasets[config.name]) datasets[config.name] = []
@@ -34,8 +35,9 @@ export default {
       let unique = Math.random().toString(36).substr(2, 9)
       datasets[config.name].push({
         id: unique,
-        vnode,
-        data,
+        tag,
+        component,
+        data: component.$data,
         path: path.join('.'),
         handlers: {
           onCreate: config.onCreate,
@@ -44,7 +46,7 @@ export default {
         }
       })
 
-      console.log('[ VDS ] Adding data synchronizer : ' + vnode + ' -> ' + config.name + ' (' + path.join('.') + ') (id ' + unique + ')')
+      console.log('[ VDS ] Adding data synchronizer : ' + tag + ' -> ' + config.name + ' (' + path.join('.') + ') (id ' + unique + ')')
 
       uniques.push(unique)
     }
@@ -58,7 +60,7 @@ export default {
           if (!ids.includes(row.id)) {
             return true
           } else {
-            console.log('[ VDS ] Removing data synchronizer : ' + row.vnode + ' -> ' + row.path + ' (' + row.id + ')')
+            console.log('[ VDS ] Removing data synchronizer : ' + row.tag + ' -> ' + row.path + ' (' + row.id + ')')
             return false
           }
         })
