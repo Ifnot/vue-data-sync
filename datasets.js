@@ -6,12 +6,16 @@ let defaultHandlers = {
   onCreate ({data, model, index}) {
     // By default : do not create new models (the follow line is for reference only)
     // if (index === -1) data.push(model)
+
+    return false
   },
   onUpdate ({data, model, index}) {
-    if (index !== -1) Vue.set(data, index, model)
+    if (index !== null && index !== -1) Vue.set(data, index, model)
+    return false
   },
   onDelete ({data, model, index}) {
-    if (index !== -1) data.splice(index, 1)
+    if (index !== null && index !== -1) data.splice(index, 1)
+    return false
   }
 }
 
@@ -73,5 +77,8 @@ export default {
     }
 
     return datasets[modelName]
+  },
+  getDefaultHandlers () {
+    return defaultHandlers
   }
 }

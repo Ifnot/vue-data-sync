@@ -52,12 +52,24 @@ export default {
     let sets = Datasets.get(e.model_name)
     for (let i = 0; i < sets.length; i++) {
       let set = sets[i]
-      let index = deepGet(set.data, set.path).findIndex(model => model.id === e.model.id)
+      let index = Array.isArray(deepGet(set.data, set.path)) ? deepGet(set.data, set.path).findIndex(model => model.id === e.model.id) : null
       let payload = {data: deepGet(set.data, set.path), index, model: e.model, event: e}
 
-      if (e.event === 'create') set.handlers.onCreate(payload)
-      else if (e.event === 'update') set.handlers.onUpdate(payload)
-      else if (e.event === 'delete') set.handlers.onDelete(payload)
+      if (e.event === 'create') {
+        if (set.handlers.onCreate.apply(set.component, [payload]) === true) {
+          Datasets.getDefaultHandlers().onCreate.apply(set.component, [payload])
+        }
+      }
+      else if (e.event === 'update') {
+        if (set.handlers.onUpdate.apply(set.component, [payload]) === true) {
+          Datasets.getDefaultHandlers().onUpdate.apply(set.component, [payload])
+        }
+      }
+      else if (e.event === 'delete') {
+        if (set.handlers.onDelete.apply(set.component, [payload]) === true) {
+          Datasets.getDefaultHandlers().onDelete.apply(set.component, [payload])
+        }
+      }
     }
   }
 }
