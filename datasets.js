@@ -27,9 +27,9 @@ export default {
         data: component.$data,
         path: path.join('.'),
         handlers: {
-          onCreate: () => { return false }, // Do not autocreate by default
-          onUpdate: () => { return true },
-          onDelete: () => { return true }
+          onCreate: config.onCreate ? config.onCreate : () => { return false }, // Do not autocreate by default
+          onUpdate: config.onUpdate ? config.onUpdate : () => { return true },
+          onDelete: config.onDelete ? config.onDelete : () => { return true }
         }
       })
 
