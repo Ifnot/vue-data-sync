@@ -12,6 +12,18 @@ let deepGet = (obj, path) => {
   return obj
 }
 
+let defaultHandlers = {
+  onCreate ({data, model, index}) {
+    if (index === -1) data.push(model)
+  },
+  onUpdate ({data, model, index}) {
+    if (index !== null && index !== -1) Vue.set(data, index, model)
+  },
+  onDelete ({data, model, index}) {
+    if (index !== null && index !== -1) data.splice(index, 1)
+  }
+}
+
 export default {
   install (Vue, options) {
     let self = this
@@ -57,17 +69,17 @@ export default {
 
       if (e.event === 'create') {
         if (set.handlers.onCreate.apply(set.component, [payload]) === true) {
-          Datasets.getDefaultHandlers().onCreate.apply(set.component, [payload])
+          defaultHandlers.onCreate.apply(set.component, [payload])
         }
       }
       else if (e.event === 'update') {
         if (set.handlers.onUpdate.apply(set.component, [payload]) === true) {
-          Datasets.getDefaultHandlers().onUpdate.apply(set.component, [payload])
+          defaultHandlers.onUpdate.apply(set.component, [payload])
         }
       }
       else if (e.event === 'delete') {
         if (set.handlers.onDelete.apply(set.component, [payload]) === true) {
-          Datasets.getDefaultHandlers().onDelete.apply(set.component, [payload])
+          defaultHandlers.onDelete.apply(set.component, [payload])
         }
       }
     }

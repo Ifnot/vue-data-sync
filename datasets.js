@@ -2,23 +2,6 @@ import Vue from 'vue'
 
 let datasets = {}
 
-let defaultHandlers = {
-  onCreate ({data, model, index}) {
-    // By default : do not create new models (the follow line is for reference only)
-    // if (index === -1) data.push(model)
-
-    return false
-  },
-  onUpdate ({data, model, index}) {
-    if (index !== null && index !== -1) Vue.set(data, index, model)
-    return false
-  },
-  onDelete ({data, model, index}) {
-    if (index !== null && index !== -1) data.splice(index, 1)
-    return false
-  }
-}
-
 export default {
   add (component, path, value) {
     let uniques = []
@@ -31,8 +14,8 @@ export default {
     } else {
       let tag = component.$vnode ? component.$vnode.tag : ''
       let config = null
-      if (typeof value === 'function') config = Object.assign({}, defaultHandlers, value.apply(component))
-      else config = Object.assign({}, {name: value}, defaultHandlers)
+      if (typeof value === 'function') config = Object.assign({}, value.apply(component))
+      else config = Object.assign({}, {name: value})
 
       if (!datasets[config.name]) datasets[config.name] = []
 
@@ -44,9 +27,9 @@ export default {
         data: component.$data,
         path: path.join('.'),
         handlers: {
-          onCreate: config.onCreate,
-          onUpdate: config.onUpdate,
-          onDelete: config.onDelete
+          onCreate: () => { return false }, // Do not autocreate by default
+          onUpdate: () => { return true },
+          onDelete: () => { return true }
         }
       })
 
@@ -77,8 +60,5 @@ export default {
     }
 
     return datasets[modelName]
-  },
-  getDefaultHandlers () {
-    return defaultHandlers
   }
 }
