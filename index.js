@@ -1,4 +1,5 @@
 import Datasets from './datasets'
+import Vue from 'vue'
 
 let matchRule = (str, rule) => {
   return new RegExp('^' + rule.split('*').join('.*') + '$').test(str)
