@@ -14,7 +14,7 @@ First, follow (the backend Quick Start)[https://github.com/Ifnot/vue-data-sync-l
 import Vue from 'vue'
 
 import Echo from 'laravel-echo'
-let echo = new Echo({ ... }) // Here your Echo configuration
+let echo = new Echo({ /* ... */ }) // Here your Echo configuration
 
 import vds from 'vue-data-sync'
 import vdsEchoDriver from 'vue-data-sync/drivers/laravel-echo-driver'
